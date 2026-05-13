@@ -20,6 +20,3 @@ permissions:
   telegram.admin:
     description: Allows all Telegram commands
     default: op
-  telegram.test:
-    description: Allows test connection
-    default: op

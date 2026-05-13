@@ -1,10 +1,10 @@
-package ru.webcam.telegramconnection;
+package ru.merzko63.telegramconnection;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.webcam.telegramconnection.modules.ConfigManager;
-import ru.webcam.telegramconnection.modules.TelegramCommands;
-import ru.webcam.telegramconnection.modules.TelegramListener;
-import ru.webcam.telegramconnection.modules.TelegramSender;
+import ru.merzko63.telegramconnection.modules.ConfigManager;
+import ru.merzko63.telegramconnection.modules.TelegramCommands;
+import ru.merzko63.telegramconnection.modules.TelegramListener;
+import ru.merzko63.telegramconnection.modules.TelegramSender;
 
 public final class Telegram_connection extends JavaPlugin {
     private ConfigManager config;

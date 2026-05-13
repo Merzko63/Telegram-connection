@@ -1,4 +1,4 @@
-package ru.webcam.telegramconnection.modules;
+package ru.merzko63.telegramconnection.modules;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

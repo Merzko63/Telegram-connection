@@ -1,5 +1,5 @@
 // TelegramCommands.java
-package ru.webcam.telegramconnection.modules;
+package ru.merzko63.telegramconnection.modules;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

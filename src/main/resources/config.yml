@@ -1,7 +1,7 @@
 # Telegram-connection Plugin Configuration for Paper 1.12.2
 
 # Language: ru or en
-language: "ru"
+language: "en"
 
 # Telegram Bot Token (get from @BotFather)
 bot-token: "EXAMPLE"
