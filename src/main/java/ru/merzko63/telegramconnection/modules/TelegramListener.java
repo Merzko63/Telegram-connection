@@ -2,16 +2,17 @@ package ru.merzko63.telegramconnection.modules;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.advancement.Advancement;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -89,100 +90,85 @@ public class TelegramListener implements Listener {
             String text = extract(update, "\"text\":\"", "\"");
             if (text == null) text = extract(update, "\"caption\":\"", "\"");
 
-            // Handle /tab command
             if (text != null && text.equalsIgnoreCase("/tab")) {
                 sendOnlineListToTelegram();
                 continue;
             }
 
-            // Handle text message
             if (text != null && firstName != null && !text.startsWith("/")) {
                 broadcastToMinecraft(formatTGMessage(firstName, text, "text"));
                 continue;
             }
 
-            // Handle sticker
             if (update.contains("\"sticker\":")) {
                 String stickerMsg = config.getTelegramStickerMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, stickerMsg, "sticker"));
                 continue;
             }
 
-            // Handle GIF (animation)
             if (update.contains("\"animation\":")) {
                 String gifMsg = config.getTelegramGifMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, gifMsg, "gif"));
                 continue;
             }
 
-            // Handle photo
             if (update.contains("\"photo\":")) {
                 String photoMsg = config.getTelegramPhotoMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, photoMsg, "photo"));
                 continue;
             }
 
-            // Handle video
             if (update.contains("\"video\":")) {
                 String videoMsg = config.getTelegramVideoMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, videoMsg, "video"));
                 continue;
             }
 
-            // Handle voice message
             if (update.contains("\"voice\":")) {
                 String voiceMsg = config.getTelegramVoiceMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, voiceMsg, "voice"));
                 continue;
             }
 
-            // Handle document/file
             if (update.contains("\"document\":")) {
                 String fileMsg = config.getTelegramFileMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, fileMsg, "file"));
                 continue;
             }
 
-            // Handle audio/music
             if (update.contains("\"audio\":")) {
                 String audioMsg = config.getTelegramAudioMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, audioMsg, "audio"));
                 continue;
             }
 
-            // Handle location
             if (update.contains("\"location\":")) {
                 String locationMsg = config.getTelegramLocationMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, locationMsg, "location"));
                 continue;
             }
 
-            // Handle contact
             if (update.contains("\"contact\":")) {
                 String contactMsg = config.getTelegramContactMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, contactMsg, "contact"));
                 continue;
             }
 
-            // Handle poll
             if (update.contains("\"poll\":")) {
                 String pollMsg = config.getTelegramPollMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, pollMsg, "poll"));
                 continue;
             }
 
-            // Handle dice
             if (update.contains("\"dice\":")) {
                 String diceMsg = config.getTelegramDiceMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, diceMsg, "dice"));
                 continue;
             }
 
-            // Handle game
             if (update.contains("\"game\":")) {
                 String gameMsg = config.getTelegramGameMessage().replace("%player%", firstName);
                 broadcastToMinecraft(formatTGMessage(firstName, gameMsg, "game"));
-                continue;
             }
         }
     }
@@ -190,7 +176,7 @@ public class TelegramListener implements Listener {
     private void sendOnlineListToTelegram() {
         Collection<? extends Player> onlinePlayers = plugin.getServer().getOnlinePlayers();
         String list = onlinePlayers.stream()
-                .map(OfflinePlayer::getName)
+                .map(player -> player.getName() != null ? player.getName() : "Unknown")
                 .collect(Collectors.joining(", "));
         String message = config.getTabResponse()
                 .replace("%count%", String.valueOf(onlinePlayers.size()))
@@ -234,13 +220,16 @@ public class TelegramListener implements Listener {
     }
 
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent e) {
+    public void onChat(AsyncChatEvent e) {
         if (config.broadcastChat()) {
+            Player player = e.getPlayer();
+            // Исправлено для Paper 1.20
+            String message = PlainTextComponentSerializer.plainText().serialize(e.originalMessage());
             String rank = "";
             String formatted = config.getFormatFromMinecraft()
                     .replace("%rank%", rank)
-                    .replace("%player%", e.getPlayer().getName())
-                    .replace("%message%", e.getMessage());
+                    .replace("%player%", player.getName())
+                    .replace("%message%", message);
             sender.sendMessage(formatted);
         }
     }
@@ -267,9 +256,11 @@ public class TelegramListener implements Listener {
     }
 
     @EventHandler
-    public void onAchievement(PlayerAchievementAwardedEvent e) {
-        if (config.broadcastAchievements()) {
-            String msg = commands.getMessage("got_achievement").replace("%achievement%", e.getAchievement().name());
+    public void onAdvancement(PlayerAdvancementDoneEvent e) {
+        if (config.broadcastAdvancements()) {
+            Advancement advancement = e.getAdvancement();
+            String key = advancement.getKey().getKey();
+            String msg = commands.getMessage("got_achievement").replace("%achievement%", key);
             sender.sendMessage(e.getPlayer().getName() + " " + msg);
         }
     }

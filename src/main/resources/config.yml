@@ -19,7 +19,7 @@ minecraft:
   broadcast-death: true
   broadcast-join: true
   broadcast-quit: true
-  broadcast-achievements: true
+  broadcast-advancements: true
   broadcast-server-start: true
 
 # Message formats

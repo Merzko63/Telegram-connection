@@ -18,6 +18,11 @@ public class ConfigManager {
         this.config = plugin.getConfig();
     }
 
+    public void saveDefaultConfig() {
+        plugin.saveDefaultConfig();
+        this.config = plugin.getConfig();
+    }
+
     public String getLanguage() {
         return config.getString("language", "en");
     }
@@ -38,6 +43,10 @@ public class ConfigManager {
         return config.getBoolean("minecraft.broadcast-chat", true);
     }
 
+    public boolean broadcastAdvancements() {
+        return config.getBoolean("minecraft.broadcast-advancements", true);
+    }
+
     public boolean broadcastDeath() {
         return config.getBoolean("minecraft.broadcast-death", true);
     }
@@ -48,10 +57,6 @@ public class ConfigManager {
 
     public boolean broadcastQuit() {
         return config.getBoolean("minecraft.broadcast-quit", true);
-    }
-
-    public boolean broadcastAchievements() {
-        return config.getBoolean("minecraft.broadcast-achievements", true);
     }
 
     public boolean broadcastServerStart() {

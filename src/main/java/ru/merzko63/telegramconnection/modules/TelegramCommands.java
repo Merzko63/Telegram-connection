@@ -4,15 +4,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class TelegramCommands implements CommandExecutor {
+public class TelegramCommands implements CommandExecutor, TabCompleter {
     private final JavaPlugin plugin;
     private final ConfigManager config;
     private final TelegramSender sender;
@@ -139,6 +142,28 @@ public class TelegramCommands implements CommandExecutor {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+
+        if (cmd.getName().equalsIgnoreCase("telegram") || cmd.getName().equalsIgnoreCase("tg")) {
+            if (args.length == 1) {
+                completions.add("test");
+                completions.add("reload");
+                completions.add("help");
+            }
+        } else if (cmd.getName().equalsIgnoreCase("tgreload")) {
+            return new ArrayList<>();
+        }
+
+        if (args.length == 1) {
+            String partial = args[0].toLowerCase();
+            completions.removeIf(s -> !s.toLowerCase().startsWith(partial));
+        }
+
+        return completions;
     }
 
     private boolean handleTest(CommandSender sender) {
