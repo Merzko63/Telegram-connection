@@ -1,4 +1,3 @@
-// TelegramCommands.java
 package ru.merzko63.telegramconnection.modules;
 
 import org.bukkit.ChatColor;
