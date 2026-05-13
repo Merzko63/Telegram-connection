@@ -1,0 +1,24 @@
+name: Telegram-connection
+version: '1.0'
+main: ru.webcam.telegramconnection.Telegram_connection
+api-version: '1.12'
+
+commands:
+  telegram:
+    description: Main Telegram plugin command
+    aliases: [tg]
+    usage: /<command> [test|reload|help]
+  tg:
+    description: Shortcut for /telegram
+    usage: /tg [test|reload|help]
+  tgreload:
+    description: Reload Telegram plugin config
+    usage: /tgreload
+
+permissions:
+  telegram.admin:
+    description: Allows all Telegram commands
+    default: op
+  telegram.test:
+    description: Allows test connection
+    default: op

@@ -1,0 +1,52 @@
+# Telegram-connection Plugin Configuration for Paper 1.12.2
+
+# Language: ru or en
+language: "ru"
+
+# Telegram Bot Token (get from @BotFather)
+bot-token: "EXAMPLE"
+
+# Telegram Chat ID (group with -100 prefix or user ID)
+chat-id: "-100EXAMPLE"
+
+# API URL - For Russia use Cloudflare Worker to bypass blocking
+# ДЛЯ РАБОТЫ В РОССИИ: используйте Cloudflare Worker для обхода блокировок
+api-url: "https://telegram.com/bot"
+
+# Minecraft events to broadcast to Telegram
+minecraft:
+  broadcast-chat: true
+  broadcast-death: true
+  broadcast-join: true
+  broadcast-quit: true
+  broadcast-achievements: true
+  broadcast-server-start: true
+
+# Message formats
+telegram:
+  # From Minecraft to Telegram: %rank%, %player%, %message%
+  format-from-minecraft: "<%rank%%player%> %message%"
+  # From Telegram to Minecraft: %1$s = message, %2$s = name, supports & and § colors
+  format-to-minecraft: "[TG] &f<%2$s&f> %1$s"
+  colors-enabled: true
+
+# Telegram command responses
+telegram-commands:
+  tab-response: "Online players (%count%): %list%"
+  no-players: "empty"
+
+# Messages for different Telegram content types sent to Minecraft
+# Use %player% placeholder for sender name
+telegram-messages:
+  sticker: "❤ sent a sticker"
+  gif: "❤ sent a GIF"
+  photo: "❤ sent a photo"
+  video: "❤ sent a video"
+  voice: "❤ sent a voice message"
+  file: "❤ sent a file"
+  audio: "❤ sent an audio"
+  location: "❤ sent a location"
+  contact: "❤ sent a contact"
+  poll: "❤ sent a poll"
+  dice: "❤ threw a dice"
+  game: "❤ sent a game invite"
